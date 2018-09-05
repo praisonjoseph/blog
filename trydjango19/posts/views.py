@@ -61,8 +61,8 @@ def post_list(request):
         Q(user__last_name__icontains = query)).distinct()
 
     paginator = Paginator(queryset_list, 5) # Show 25 contacts per page
-
-    page = request.GET.get('page')
+    page_request_var = "page"
+    page = request.GET.get(page_request_var)
     try:
         queryset = paginator.page(page)
     except PageNotAnInteger:
@@ -74,7 +74,8 @@ def post_list(request):
     #import pdb; pdb.set_trace()
     context = {"title": "List",
             "object_list": queryset,
-            "today": today
+            "today": today,
+            "page_request_var": page_request_var
             }
     #import pdb; pdb.set_trace()
     return render(request,"post_list.html", context)
