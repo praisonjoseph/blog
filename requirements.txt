@@ -1,0 +1,4 @@
+Django==1.9
+Pillow==3.1.0
+django-pagedown==1.0.6
+wheel==0.24.0
