@@ -26,7 +26,13 @@
   Linkedin
   </a>
   </p> -->
-    {{instance.content| linebreaks}} <br>
+  <div class="row">
+  <div class="col-sm-12" >
+    <div class="content-markdown"> {{instance.content}} </div>
+    <hr>
+    <br>
 <div class="fb-comments" data-href="{{ request.build_absolute_uri }}" data-numposts="5"></div>
+</div>
+</div>
 </div>
 {% endblock %}
