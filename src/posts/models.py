@@ -5,6 +5,8 @@ from django.utils.text import slugify
 from django.dispatch import receiver
 from django.conf import settings
 from django.utils import timezone
+from markdown_deux import markdown
+from django.utils.safestring import mark_safe
 
 class PostManager(models.Manager):
     def active(self, *args, **kwargs):
@@ -35,6 +37,10 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse("posts:detail", kwargs={"slug": self.slug})
         #return "/posts/%s/" %(self.id)
+    
+    def get_markdown(self):
+        content = self.content
+        return mark_safe(markdown(content))
 
     class Meta:
         ordering=["-timestamp", "-updated"]

@@ -12,7 +12,7 @@
     <link rel="stylesheet" href= '{% static "css/base.css" %}'/>
     <title> {% block head_title %} Django Blog {% endblock %}</title>
   <style>
-  {% block style %} {% endblock style %}
+  /* {% block style_content %} {% endblock style_content %} */
   </style>
   
   {% block head_extra %} {% endblock head_extra %}
@@ -45,10 +45,12 @@
       $(document).ready(function(){
         $(".content-markdown").each(function(){
           var content = $(this).text()
-          console.log(content)
           var markedContent = marked(content)
-          console.log(markedContent)
           $(this).html(markedContent)
+        })
+        $(".post-detail-item img").each(function(){
+          $(this).addClass("img-responsive")
+
         })
      })
 
