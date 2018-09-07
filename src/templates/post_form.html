@@ -5,11 +5,21 @@
 {% endblock head_extra %}
 
   {% block content %}
-  {{ block.super }}
-    <h1>Form</h1>
+  <!-- {{ block.super }} -->
+  <div class="col-sm-6" >
+    <h1>Preview</h1>
+    <div class="content-preview" >
+      <h3 id="preview-title"></h3>
+      <p id="preview-content"></p>
+    </div>
+  </div>
+
+  <div class="col-sm-6" >
+  <h1>Form</h1>
     <form class="" method="POST", enctype="multipart/form-data">
     {{ form.as_p }}
     {% csrf_token %}
     <input type="submit" name="" value="Create Post">
     </form>
+  </div>
   {% endblock %}
