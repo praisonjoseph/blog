@@ -10,6 +10,9 @@ from posts.forms import PostForm
 #from django.conf import settings
 from django.utils import timezone
 from django.db.models import Q
+from comments.forms import CommentForm
+from comments.models import Comment
+from django.contrib.contenttypes.models import ContentType
 
 
 def post_create(request):
@@ -40,9 +43,30 @@ def post_detail(request, slug=None):
     if instance.draft or instance.publish > timezone.now().date():
         if not request.user.is_staff or not request.user.is_superuser:
             raise Http404
+    initial_data = {
+        "content_type": instance.get_content_type,
+        "object_id": instance.id
+    }
+    form = CommentForm(request.POST or None, initial=initial_data)
+    if form.is_valid():
+        c_type = form.cleaned_data.get("content_type")
+        content_type = ContentType.objects.get(model=c_type)
+        obj_id = form.cleaned_data.get("object_id")
+        content_data = form.cleaned_data.get("content")
+        # print(content_type)
+        new_comment, created = Comment.objects.get_or_create(
+                            user = request.user,
+                            content_type = content_type,
+                            object_id = obj_id,
+                            content = content_data
+        )
+        
+    comments = instance.comments
     share_string = quote_plus(instance.content)
     context = {"instance": instance,
                 "share_string": share_string,
+                "comments": comments,
+                "comment_form": form
                 }
 
     return render(request,"post_detail.html", context)

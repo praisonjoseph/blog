@@ -7,6 +7,9 @@ from django.conf import settings
 from django.utils import timezone
 from markdown_deux import markdown
 from django.utils.safestring import mark_safe
+from comments.models import Comment
+
+from django.contrib.contenttypes.models import ContentType
 
 class PostManager(models.Manager):
     def active(self, *args, **kwargs):
@@ -42,8 +45,21 @@ class Post(models.Model):
         content = self.content
         return mark_safe(markdown(content))
 
+    @property
+    def comments(self):
+        instance = self
+        qs = Comment.objects.filter_by_instance(instance)
+        return qs
+
+    @property
+    def get_content_type(self):
+        instance = self
+        content_type = ContentType.objects.get_for_model(instance.__class__)
+        return content_type
+
     class Meta:
         ordering=["-timestamp", "-updated"]
+
 def create_slug(instance, new_slug=None):
     slug = slugify(instance.title)
     if new_slug is not None:
